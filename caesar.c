@@ -1,43 +1,56 @@
 #include <stdio.h>
-#include <cs50.h>
 #include <string.h>
+#include <cs50.h>
 #include <ctype.h>
+#include <stdlib.h>
 
-int turn(int y, int x);
-int main(int argc, string argv[]){
-    printf("plaintext:  ");
-    string s = get_string();
-    printf("ciphertext: ");
-    if(argc == 2){
-        int k = atoi(argv[1]);
-        int add;
-        for(int i=0, n=strlen(s); i<n; i++)
-        {   
-            add=(int)s[i]+k;
-            if( isupper(s[i])){
-                printf("%c",toupper((char) turn(1,add)));
-            }else if(islower(s[i])){
-                printf("%c",tolower((char) turn(2,add)));
-            }else{
-                 printf("%c",s[i]);
+
+int main (int argc ,string argv[])
+{
+    if(argv[1] != '\0')
+    {
+    int key = atoi (argv[1]);
+    if(key>=0)
+    {
+        if(argc == 2)
+        {
+            printf("plaintext: ");
+            string s = get_string();
+            printf("ciphertext:");
+            for(int i=0; i <strlen(s) ;i++)
+            {
+                 
+                if(isalpha(s[i]))   //如果是alphabet
+                {
+                   
+                    if(isupper(s[i])) //如果是大寫
+                        {
+                            s[i]=(char)(((int)s[i]-65+key)%26+65);
+                            printf("%c",s[i]);
+                        }
+                    else if(islower(s[i]))  //☆★★
+                        {
+                            s[i]=(char)(((int)s[i]-97+key)%26+97);
+                            printf("%c",s[i]);
+                        }
+                }
+                else
+                    printf("%c",s[i]);
+                    
             }
-        } 
-           
-    }else{
-        printf("Usage: ./caesar k");
+            
+            printf("\n");
+        }
+           return 0;
     }
-    printf("\n");
-    return 0;
-}
-
-int turn(int y, int x){
-    int count=0;
-    if(y==1){
-        //upper
-        count=((x-65) % 26) + 65;
-    }else if(y==2){
-        //lower
-        count=((x-97) % 26) + 97;
+    if(key <0 || argc!= 2)
+    {
+        printf("Usage: ./caesar k\n");
     }
-    return count;
+    }
+    if(argv[1] == '\0')
+    {
+        printf("Usage: ./caesar k\n");
+        return 1;
+    }
 }
